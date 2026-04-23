@@ -1,0 +1,209 @@
+/* Modern typography */
+html, body, [class*="css"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* App background & main block */
+.stApp {
+  background: linear-gradient(180deg, #FAFAFB 0%, #F4F5FA 100%);
+}
+.main .block-container {
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+  max-width: 900px;
+}
+
+/* Hero header */
+.hero-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.03em;
+}
+.hero-subtitle {
+  color: #6B7280;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Sidebar polish */
+section[data-testid="stSidebar"] {
+  background: #FFFFFF;
+  border-right: 1px solid #EEF0F6;
+}
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 {
+  font-weight: 600;
+  color: #1A1A2E;
+  letter-spacing: -0.02em;
+}
+
+/* Chat messages */
+[data-testid="stChatMessage"] {
+  background: #FFFFFF;
+  border: 1px solid #EEF0F6;
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.04);
+  margin-bottom: 0.75rem;
+}
+
+/* Chat input */
+[data-testid="stChatInput"] textarea {
+  border-radius: 12px !important;
+  border: 1px solid #E5E7EF !important;
+  font-size: 0.98rem !important;
+}
+
+/* Buttons */
+.stButton > button {
+  border-radius: 10px;
+  border: 1px solid #E5E7EF;
+  background: #FFFFFF;
+  color: #1A1A2E;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.stButton > button:hover {
+  border-color: #5B6CFF;
+  color: #5B6CFF;
+  transform: translateY(-1px);
+}
+
+/* Primary button */
+.stButton > button[kind="primary"] {
+  background: #5B6CFF;
+  color: #FFFFFF;
+  border-color: #5B6CFF;
+}
+.stButton > button[kind="primary"]:hover {
+  background: #4A5AE8;
+  color: #FFFFFF;
+}
+
+/* Radio / pill selectors */
+div[role="radiogroup"] label {
+  background: #F4F5FA;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  margin-right: 0.35rem;
+  transition: all 0.15s ease;
+}
+div[role="radiogroup"] label:hover {
+  border-color: #D4D8EA;
+}
+
+/* File uploader */
+[data-testid="stFileUploader"] section {
+  border: 2px dashed #D4D8EA;
+  border-radius: 12px;
+  background: #FAFBFF;
+  padding: 1.25rem;
+}
+[data-testid="stFileUploader"] section:hover {
+  border-color: #5B6CFF;
+  background: #F5F6FF;
+}
+
+/* Citation card */
+.citation-card {
+  background: #FFFFFF;
+  border: 1px solid #EEF0F6;
+  border-left: 3px solid #5B6CFF;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.03);
+}
+.citation-source {
+  font-weight: 600;
+  color: #1A1A2E;
+  font-size: 0.92rem;
+  margin-bottom: 0.35rem;
+}
+.citation-snippet {
+  color: #4B5563;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+/* Chunk preview */
+.chunk-box {
+  background: #F8F9FE;
+  border: 1px solid #EEF0F6;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+  color: #374151;
+  line-height: 1.55;
+}
+.chunk-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  color: #6B7280;
+  font-weight: 500;
+}
+.chunk-score-pill {
+  background: #EEF0FF;
+  color: #5B6CFF;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* Confidence bar */
+.confidence-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1rem;
+}
+.confidence-label {
+  font-size: 0.82rem;
+  color: #6B7280;
+  font-weight: 500;
+  min-width: 90px;
+}
+.confidence-bar {
+  flex: 1;
+  height: 8px;
+  background: #EEF0F6;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.confidence-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+.confidence-value {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1A1A2E;
+  min-width: 44px;
+  text-align: right;
+}
+
+/* Small helper text */
+.doc-pill {
+  display: inline-block;
+  background: #EEF0FF;
+  color: #5B6CFF;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin-right: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+/* Hide Streamlit chrome */
+#MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+header[data-testid="stHeader"] { background: transparent; }
