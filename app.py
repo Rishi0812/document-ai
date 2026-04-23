@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hmac
 import os
 import tempfile
 from pathlib import Path
@@ -51,6 +52,71 @@ def _get_api_key() -> str:
         return st.secrets["OPENAI_API_KEY"]
     except Exception:
         return os.environ.get("OPENAI_API_KEY", "")
+
+
+def _get_auth_config() -> tuple[str, str]:
+    """Return (username, password) from Streamlit secrets or env.
+
+    If neither is configured, returns empty strings and auth is skipped
+    (useful for local dev).
+    """
+    username, password = "", ""
+    try:
+        auth = st.secrets.get("auth", {}) if hasattr(st, "secrets") else {}
+        username = auth.get("username", "") if hasattr(auth, "get") else ""
+        password = auth.get("password", "") if hasattr(auth, "get") else ""
+    except Exception:
+        pass
+    username = username or os.environ.get("APP_USERNAME", "")
+    password = password or os.environ.get("APP_PASSWORD", "")
+    return username, password
+
+
+def _login_gate() -> bool:
+    """Render a login form until credentials are valid.
+
+    Returns True once the user is authenticated (or auth is not configured,
+    for local dev). Uses `hmac.compare_digest` for constant-time comparison
+    so the check isn't timing-side-channel leaky.
+    """
+    expected_user, expected_pw = _get_auth_config()
+    if not expected_user or not expected_pw:
+        return True  # no auth configured → open (local dev)
+
+    if st.session_state.get("authenticated"):
+        return True
+
+    st.markdown(
+        '<div class="hero-title" style="margin-top: 3rem;">'
+        "Internal Knowledge Assistant"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        '<div class="hero-subtitle">Sign in to continue.</div>',
+        unsafe_allow_html=True,
+    )
+
+    _, mid, _ = st.columns([1, 2, 1])
+    with mid:
+        with st.form("login", clear_on_submit=False):
+            username = st.text_input("Username", autocomplete="username")
+            password = st.text_input(
+                "Password", type="password", autocomplete="current-password"
+            )
+            submitted = st.form_submit_button(
+                "Sign in", type="primary", use_container_width=True
+            )
+
+        if submitted:
+            user_ok = hmac.compare_digest(username, expected_user)
+            pw_ok = hmac.compare_digest(password, expected_pw)
+            if user_ok and pw_ok:
+                st.session_state.authenticated = True
+                st.rerun()
+            else:
+                st.error("Invalid username or password.")
+    return False
 
 
 @st.cache_resource(show_spinner=False)
@@ -228,11 +294,21 @@ def _sidebar(store: VectorStoreManager) -> tuple[str, str]:
             label_visibility="collapsed",
         )
 
+        if st.session_state.get("authenticated"):
+            st.divider()
+            if st.button("Log out", use_container_width=True):
+                st.session_state.authenticated = False
+                st.session_state.chat_history = []
+                st.rerun()
+
     return role_key, mode_key
 
 
 def main() -> None:
     _inject_css()
+
+    if not _login_gate():
+        return
 
     st.markdown(
         '<div class="hero-title">Internal Knowledge Assistant</div>',
